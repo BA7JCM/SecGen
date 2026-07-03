@@ -96,16 +96,10 @@
         </vulnerability>
 
         <vulnerability module_path=".*/sudo_root_more">
-        <input into="strings_to_leak">
-                <encoder type="^(ascii|alpha)_reversible$" difficulty="low">
-                    <input into="strings_to_encode">
-                        <generator type="flag_generator" />
-                    </input>
-                </encoder>
+            <input into="strings_to_leak">
+                <generator type="flag_generator" />
             </input>
         </vulnerability>
-
-        <vulnerability module_path=".*/sudo_root_more"></vulnerability>
 
         <network type="private_network"/>
     <build type="cleanup">
