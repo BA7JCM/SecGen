@@ -129,8 +129,15 @@ class gitlab_13102::configure {
     }
     ->
     exec { 'git_push_master':
-      command => 'git push -u origin master',
-      cwd     => '/tmp/dev-notes',
+      command   => 'git push -u origin master',
+      cwd       => '/tmp/dev-notes',
+      # GitLab's HTTP endpoint can take minutes to become ready after
+      # reconfigure; retry so a not-yet-ready 502/connection error doesn't
+      # permanently lose the hard-mode flag. NB: retries only help if the
+      # failure is startup timing -- this still assumes GitLab's
+      # "push to create project" is enabled so dev-notes auto-creates.
+      tries     => 10,
+      try_sleep => 30,
     }
   } else {
     file { "/home/git/${leaked_filenames[0]}":
