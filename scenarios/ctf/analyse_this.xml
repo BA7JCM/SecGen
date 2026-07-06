@@ -5,6 +5,7 @@
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
   <name>Putting it together</name>
+  <author>Rosie Fletcher</author>
   <author>Z. Cliffe Schreuders</author>
   <description>Analyse the files on the server from kali.
     Username: analyse
@@ -47,9 +48,9 @@
 
     <input into_datastore="IP_addresses">
       <!-- 0 attack_vm -->
-      <value>172.16.0.2</value>
+      <network_ip system="attack_vm"/>
       <!-- 1 hackme_server -->
-      <value>172.16.0.3</value>
+      <network_ip system="server"/>
     </input>
     
     <utility module_path=".*/parameterised_accounts">
@@ -58,23 +59,24 @@
       </input>
     </utility>
 
+<!-- This is a decryption lab so CyberChef is needed -->
     <utility module_path=".*/iceweasel">
       <input into="accounts">
         <value>{"username":"kali","password":"kali","super_user":"true","strings_to_leak":[],"leaked_filenames":[]}</value>
       </input>
       <input into="autostart">
-        <value>false</value>
+        <value>true</value>
+      </input>
+      <input into="start_page">
+        <value>file:///opt/cyberchef/CyberChef.html</value>
       </input>
     </utility>
 
     <utility module_path=".*/kali_top10"/>
     <utility module_path=".*/kali_web"/>
+    <utility module_path=".*/cyberchef"/>
 
-    <network type="private_network">
-      <input into="IP_address">
-        <datastore access="0">IP_addresses</datastore>
-      </input>
-    </network>
+    <network type="private_network"/>
     <input into_datastore="spoiler_admin_pass">
       <generator type="strong_password_generator"/>
     </input>
@@ -87,7 +89,7 @@
 
   <system>
     <system_name>server</system_name>
-    <base distro="Debian 10" type="desktop" name="KDE"/>
+    <base distro="Debian 12" type="desktop" name="KDE"/>
 
     <!-- strong password -->
     <input into_datastore="username">
@@ -140,6 +142,16 @@
 
     <!-- Release pcap file -->
     <vulnerability type="pcap">
+      <input into="account">
+        <generator type="account">
+          <input into="username">
+            <datastore>username</datastore>
+          </input>
+          <input into="password">
+            <datastore>password</datastore>
+          </input>
+        </generator>
+      </input>
       <input into="base64_file">
         <generator type="pcap_generator">
           <input into="strings_to_leak">
@@ -153,25 +165,31 @@
       <input into="leaked_filename">
         <value>capture.pcap</value>
       </input>
-      <input into="storage_directory">
-        <value>/home/analyse/</value>
-      </input>
     </vulnerability>
 
     <vulnerability module_path=".*hidden_file.*">
-      <input into="storage_directory">
-        <value>/home/analyse/</value>
+      <input into="account">
+        <generator type="account">
+          <input into="username">
+            <datastore>username</datastore>
+          </input>
+          <input into="password">
+            <datastore>password</datastore>
+          </input>
+        </generator>
       </input>
       <input into="strings_to_leak">
         <generator type="flag_generator"/>
       </input>
+      <input into="leaked_filenames">
+        <value>secret</value>
+      </input>
+      <input into="challenge_name">
+        <value>find_it</value>
+      </input>
     </vulnerability>
 
-    <network type="private_network" >
-      <input into="IP_address">
-        <datastore access="1">IP_addresses</datastore>
-      </input>
-    </network>
+    <network type="private_network"/>
     <build type="cleanup">
       <input into="root_password">
         <datastore>spoiler_admin_pass</datastore>
