@@ -88,13 +88,6 @@
             <input into="strings_to_leak">
                 <generator type="flag_generator" />
             </input>
-            <input into="strings_to_pre_leak">
-                <encoder type="^(ascii|alpha)_reversible$" difficulty="low">
-                    <input into="strings_to_encode">
-                        <generator type="flag_generator" />
-                    </input>
-                </encoder>
-            </input>
         </vulnerability>
 
         <vulnerability module_path=".*/chkrootkit"></vulnerability>
