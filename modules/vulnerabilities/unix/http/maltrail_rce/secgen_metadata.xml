@@ -46,11 +46,6 @@
         <generator type="username_generator"/>
     </default_input>
 
-    <!-- Volume of randomized threat data: low, medium, or high -->
-    <default_input into="data_volume">
-        <value>medium</value>
-    </default_input>
-
     <!-- Generate randomized MalTrail threat data (scenario passes embedded_flag) -->
     <default_input into="maltrail_data">
         <generator type="maltrail_data"/>
