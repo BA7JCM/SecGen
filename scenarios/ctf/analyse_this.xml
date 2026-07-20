@@ -4,7 +4,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <name>Putting it together</name>
+  <name>Analyse This!</name>
   <author>Rosie Fletcher</author>
   <author>Z. Cliffe Schreuders</author>
   <description>Analyse the files on the server from kali.
